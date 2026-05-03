@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium 3D Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gold: #ffcc00;
+            --dark-bg: #0a0a0a;
+            --card-bg: #151515;
+            --text-gray: #b0b0b0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 8%;
+            background: rgba(10, 10, 10, 0.95);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 6px solid var(--gold); /* Thick Base Line */
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+        }
+
+        .logo span {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        /* --- SCROLL BUTTONS --- */
+        .scroll-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 2000;
+        }
+
+        .scroll-btn {
+            background: var(--gold);
+            color: black;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: none; /* Controlled by JS */
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
+            transition: 0.3s;
+            font-size: 1.2rem;
+        }
+
+        /* --- HERO SECTION --- */
+        section { padding: 100px 8%; }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 85vh;
+            flex-wrap: wrap;
+        }
+
+        .profile-3d {
+            position: relative;
+            width: 350px;
+            height: 350px;
+        }
+
+        .profile-3d img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 4px solid var(--gold);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: morph 6s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.2);
+        }
+
+        @keyframes morph {
+            0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            50% { border-radius: 50% 50% 20% 80% / 25% 80% 20% 75%; }
+        }
+
+        .hero-info { flex: 1; min-width: 300px; padding-left: 50px; }
+        .hero-info h1 { font-size: 3.5rem; margin-bottom: 0.5rem; }
+        .gold-text { color: var(--gold); }
+
+        .btn-group { margin-top: 2rem; display: flex; gap: 1rem; }
+
+        .btn {
+            padding: 12px 28px;
+            border: 2px solid var(--gold);
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.4s;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            border-radius: 25px;
+        }
+
+        .btn:hover {
+            background: var(--gold);
+            color: black;
+            box-shadow: 0 0 20px var(--gold);
+        }
+
+        .social-media { margin-top: 2rem; display: flex; gap: 1.5rem; }
+        .social-media i {
+            font-size: 1.6rem;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .social-media i:hover { color: var(--gold); transform: translateY(-5px); }
+
+        /* --- FLOWING LIGHT CARDS (Skills & Projects) --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .flow-box {
+            position: relative;
+            background: #111;
+            padding: 3px; /* Gap for the light border */
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .flow-box::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(transparent, transparent, transparent, var(--gold));
+            animation: rotateFlow 4s linear infinite;
+        }
+
+        .box-inner {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            text-align: center;
+        }
+
+
+        section { padding: 120px 8%; } /* More vertical space */
+        .gold-text { color: var(--gold); margin-bottom: 1rem; display: inline-block; }
+        h1, h2, h3 { letter-spacing: 1px; margin-bottom: 1.5rem; }
+        p { margin-bottom: 1rem; color: var(--text-gray); }
+
+        /* --- CERTIFICATE SLIDER --- */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 20px;
+            background: var(--card-bg);
+            border: 1px solid #333;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide {
+            min-width: 100%;
+            position: relative;
+            height: 400px;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 40px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            width: 100%;
+        }
+
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .nav-icon {
+            background: rgba(255, 204, 0, 0.2);
+            color: var(--gold);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid var(--gold);
+        }
+
+        .nav-icon:hover {
+            background: var(--gold);
+            color: black;
+        }
+
+        /* --- FLOWING LIGHT BOXES --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 4rem; /* More space between cards */
+            margin-top: 3rem;
+        }
+
+        .flow-box {
+            position: relative;
+            background: #111;
+            padding: 3px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+
+        /* --- PROJECT IMAGE STYLES --- */
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid #333;
+            height: 350px; /* Fixed height for consistency */
+        }
+
+        .project-img-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .project-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover .project-img-container img {
+            transform: scale(1.1); /* Zoom effect */
+        }
+
+        .project-details {
+            position: absolute;
+            bottom: -100%; /* Hidden by default */
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            transition: 0.5s ease-in-out;
+        }
+
+        .project-card:hover .project-details {
+            bottom: 0; /* Slide up on hover */
+        }
+
+        .project-details h3 {
+            margin-bottom: 10px;
+            color: var(--gold);
+        }
+
+        .project-details p {
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .flow-box::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(transparent, transparent, transparent, var(--gold));
+            animation: rotateFlow 4s linear infinite;
+        }
+
+        .box-inner {
+            background: var(--card-bg);
+            padding: 50px 30px;
+            border-radius: 17px;
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            text-align: center;
+        }
+
+        @keyframes rotateFlow { 100% { transform: rotate(360deg); } }
+
+        /* --- SCROLL CONTROLS --- */
+        .scroll-btn {
+            position: fixed;
+            bottom: 30px; right: 30px;
+            background: var(--gold);
+            color: black;
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            display: none;
+            justify-content: center; align-items: center;
+            cursor: pointer;
+            z-index: 2000;
+            box-shadow: 0 0 20px rgba(255,204,0,0.5);
+        }
+
+
+        @keyframes rotateFlow { 100% { transform: rotate(360deg); } }
+
+        .more-content { display: none; opacity: 0; padding-top: 15px; }
+        .flow-box.active .main-content { display: none; }
+        .flow-box.active .more-content { display: block; opacity: 1; }
+
+        /* --- ABOUT & CERTIFICATES --- */
+        .cert-card {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            height: 250px;
+        }
+
+        .cert-card img { width: 100%; height: 100%; object-fit: cover; }
+
+        .cert-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: 0.5s;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--gold);
+        }
+
+        .cert-card:hover .cert-overlay { opacity: 1; }
+
+        /* --- CONTACT & FORM --- */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        form { display: flex; flex-direction: column; gap: 1.2rem; }
+        form input, form textarea {
+            padding: 15px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 8px;
+            outline: none;
+        }
+        form input:focus { border-color: var(--gold); }
+
+        #map-container {
+            width: 100%;
+            height: 350px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 60px 8%;
+            text-align: center;
+            background: #050505;
+            border-top: 1px solid #222;
+        }
+
+        .footer-socials i {
+            margin: 0 15px;
+            font-size: 1.8rem;
+            transition: 0.4s;
+        }
+        .footer-socials i:hover { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
+    </style>
+</head>
+<body>
+
+    <div class="scroll-control">
+        <div id="btnUp" class="scroll-btn" onclick="window.scrollTo(0,0)"><i class="fas fa-arrow-up"></i></div>
+        <div id="btnDown" class="scroll-btn" onclick="window.scrollTo(0,document.body.scrollHeight)"><i class="fas fa-arrow-down"></i></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <img src="images/3643779_clock_hour_ticker_time_times_icon (1).png" alt="Logo">
+            <span>PORTFOLIO</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="profile-3d">
+            <img src="images/WhatsApp Image 2024-11-09 at 10.40.00_627f3f9b.jpg" alt="Your Profile">
+        </div>
+        <div class="hero-info">
+            <h1>I am <span class="gold-text">Your Name</span></h1>
+            <h3 style="font-weight: 400; color: var(--text-gray);">Professional Web Developer</h3>
+            <div class="btn-group">
+                <button class="btn">Download CV</button>
+                <button class="btn">More Options</button>
+            </div>
+            <div class="social-media">
+                <i class="fab fa-github"></i>
+                <i class="fab fa-linkedin"></i>
+                <i class="fab fa-instagram"></i>
+                <i class="fab fa-youtube"></i>
+            </div>
+        </div>
+    </section>
+
+     <section id="about">
+        <h2 class="gold-text">Education & Mastery</h2>
+        <div class="grid-container">
+            <div class="box-inner" style="text-align: left; border: 1px solid #333;">
+                <h3>Academic Path</h3>
+                <p>College name : </p>
+                <p><strong>B.Tech CSE:</strong> 2020 - 2024</p>
+                <p>College name : </p>
+                <p><strong>Intermediate:</strong> 98% Score</p>
+                <p style="margin-top: 20px;">Focused on Algorithm Design and Full Stack Architectures during my academic tenure.</p>
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-nav">
+                    <div class="nav-icon" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></div>
+                    <div class="nav-icon" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></div>
+                </div>
+                <div class="slider-wrapper" id="sliderWrapper">
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800" alt="AWS">
+                        <div class="slide-content">
+                            <h3 class="gold-text">AWS Cloud Master</h3>
+                            <p>Certified Solutions Architect. Focus on S3, EC2, and Lambda functions.</p>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800" alt="Fullstack">
+                        <div class="slide-content">
+                            <h3 class="gold-text">Full Stack Professional</h3>
+                            <p>Specialization in MERN Stack and high-concurrency Node.js servers.</p>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800" alt="Cyber">
+                        <div class="slide-content">
+                            <h3 class="gold-text">Cyber Security Expert</h3>
+                            <p>Deep dive into network protocols and ethical hacking essentials.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Slider Logic
+        let currentIndex = 0;
+        const wrapper = document.getElementById('sliderWrapper');
+        const totalSlides = document.querySelectorAll('.slide').length;
+
+        function updateSlider() {
+            wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalSlides;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+            updateSlider();
+        }
+
+        // Auto-play (optional)
+        setInterval(nextSlide, 5000);
+
+        // Scroll button visibility
+        window.onscroll = function() {
+            const up = document.getElementById('btnUp');
+            const down = document.getElementById('btnDown');
+            if (window.scrollY > 300) {
+                up.style.display = "flex";
+                down.style.display = "none";
+            } else {
+                up.style.display = "none";
+                down.style.display = "flex";
+            }
+        };
+    </script>
+    <section id="skills">
+        <h2 class="gold-text">My Skills</h2>
+        <div class="grid-container">
+            <div class="flow-box" id="skill1">
+                <div class="box-inner">
+                    <div class="main-content">
+                        <i class="fab fa-react fa-4x gold-text"></i>
+                        <h3>Frontend Development</h3>
+                        <p>Click more for details</p>
+                        <button class="btn" style="margin-top:15px; padding: 5px 15px;" onclick="toggleBox('skill1')">More</button>
+                    </div>
+                    <div class="more-content">
+                        <i class="fas fa-code fa-4x gold-text"></i>
+                        <h3>Advanced React</h3>
+                        <p>Redux, Hooks, Next.js, and Framer Motion for high-end animations.</p>
+                        <button class="btn" style="margin-top:15px; padding: 5px 15px;" onclick="toggleBox('skill1')">Back</button>
+                    </div>
+                </div>
+            </div>
+            <div class="flow-box" id="skill2">
+                <div class="box-inner">
+                    <div class="main-content">
+                        <i class="fab fa-node-js fa-4x gold-text"></i>
+                        <h3>Backend Systems</h3>
+                        <p>Click more for details</p>
+                        <button class="btn" style="margin-top:15px; padding: 5px 15px;" onclick="toggleBox('skill2')">More</button>
+                    </div>
+                    <div class="more-content">
+                        <i class="fas fa-server fa-4x gold-text"></i>
+                        <h3>Architecture</h3>
+                        <p>Node, Express, MongoDB, and Microservices architecture.</p>
+                        <button class="btn" style="margin-top:15px; padding: 5px 15px;" onclick="toggleBox('skill2')">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2 class="gold-text">Recent Projects</h2>
+        <div class="grid-container">
+            
+            <div class="project-card">
+                <div class="project-img-container">
+                    <img src="https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=800" alt="E-Commerce Project">
+                    <div class="project-details">
+                        <h3>E-Commerce Dashboard</h3>
+                        <p>A full-stack retail solution featuring real-time inventory tracking and secure Stripe payments.</p>
+                        <div class="project-links">
+                            <a href="#" class="btn" style="padding: 5px 15px;">Demo</a>
+                            <a href="#" class="btn" style="padding: 5px 15px;">Code</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-img-container">
+                    <img src="images/WhatsApp Image 2025-01-09 at 20.20.19_94e31cf7.jpg" alt="AI Image Gen">
+                    <div class="project-details">
+                        <h3>Arduino UNO</h3>
+                        <p>Deep learning application integrated with OpenAI API to transform text prompts into digital art.</p>
+                        <div class="project-links">
+                            <a href="#" class="btn" style="padding: 5px 15px;">Launch</a>
+                            <a href="#" class="btn" style="padding: 5px 15px;">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-img-container">
+                    <img src="images/WhatsApp Image 2025-01-09 at 20.20.19_b26d4328.jpg" alt="Data Analytics">
+                    <div class="project-details">
+                        <h3>Finance Tracker</h3>
+                        <p>Interactive data visualization tool for personal wealth management using D3.js and React.</p>
+                        <div class="project-links">
+                            <a href="#" class="btn" style="padding: 5px 15px;">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+
+
+
+    
+
+    <section id="contact">
+        <h2 class="gold-text">Contact Me</h2>
+        <div class="contact-container">
+            <div>
+                <p><strong>Role:</strong> Full Stack Developer</p>
+                <p><strong>Email:</strong> dev@example.com</p>
+                <p><strong>Phone:</strong> +91 7989004552</p>
+                <div id="map-container" style="margin-top: 20px;">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.757751100147!2d78.381488!3d17.436762!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDI2JzEyLjMiTiA3OMKwMjInNTMuNCJF!5e0!3m2!1sen!2sin!4v1620000000000" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+                </div>
+            </div>
+            <form id="contactForm">
+                <div id="successMsg" style="display:none; color:var(--gold); font-weight:bold; margin-bottom:10px;">Message Sent!</div>
+                <input type="text" id="name" placeholder="Name" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <textarea rows="6" id="msg" placeholder="Message" required></textarea>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-socials">
+            <i class="fab fa-github"></i>
+            <i class="fab fa-linkedin"></i>
+            <i class="fab fa-instagram"></i>
+        </div>
+        <p style="margin-top: 20px; color: var(--text-gray);">© 2026 Designed by Your Name</p>
+    </footer>
+
+    <script>
+        // Scroll Button Logic
+        const btnUp = document.getElementById('btnUp');
+        const btnDown = document.getElementById('btnDown');
+
+        window.onscroll = function() {
+            if (window.scrollY > 300) {
+                btnUp.style.display = "flex";
+                btnDown.style.display = "none";
+            } else {
+                btnUp.style.display = "none";
+                btnDown.style.display = "flex";
+            }
+        };
+
+        // Skill Box "More" Logic
+        function toggleBox(id) {
+            document.getElementById(id).classList.toggle('active');
+        }
+
+        // Form Validation Logic
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button');
+            btn.innerText = "Sending...";
+            
+            setTimeout(() => {
+                document.getElementById('successMsg').style.display = 'block';
+                btn.innerText = "Send Message";
+                this.reset();
+                setTimeout(() => { document.getElementById('successMsg').style.display = 'none'; }, 3000);
+            }, 1000);
+        });
+
+        // Initial state for Down button
+        window.onload = () => { btnDown.style.display = "flex"; };
+    </script>
+</body>
+</html>
